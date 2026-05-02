@@ -1,0 +1,79 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Paleta mais sóbria: off-white quente + verde floresta */
+    --background: 45 18% 97%;
+    --foreground: 160 22% 16%;
+    --card: 45 14% 99%;
+    --card-foreground: 160 22% 16%;
+    --popover: 45 14% 99%;
+    --popover-foreground: 160 22% 16%;
+    --primary: 158 38% 26%;
+    --primary-foreground: 45 20% 98%;
+    --secondary: 150 12% 92%;
+    --secondary-foreground: 160 22% 18%;
+    --muted: 150 8% 93%;
+    --muted-foreground: 160 10% 42%;
+    --accent: 158 32% 36%;
+    --accent-foreground: 45 20% 98%;
+    --destructive: 0 55% 46%;
+    --destructive-foreground: 45 20% 98%;
+    --border: 150 10% 88%;
+    --input: 150 10% 88%;
+    --ring: 158 38% 32%;
+    --radius: 0.5rem;
+    /* Slot do álbum (verde “grama”) */
+    --album-field-from: 148 42% 30%;
+    --album-field-to: 152 45% 22%;
+    --album-slot-ink: 45 25% 98%;
+    --album-owned-glow: 152 55% 42%;
+  }
+
+  .dark {
+    --background: 160 18% 9%;
+    --foreground: 45 12% 94%;
+    --card: 160 16% 11%;
+    --card-foreground: 45 12% 94%;
+    --popover: 160 16% 11%;
+    --popover-foreground: 45 12% 94%;
+    --primary: 152 40% 48%;
+    --primary-foreground: 160 22% 10%;
+    --secondary: 160 12% 16%;
+    --secondary-foreground: 45 12% 94%;
+    --muted: 160 10% 18%;
+    --muted-foreground: 150 8% 58%;
+    --accent: 152 38% 42%;
+    --accent-foreground: 160 22% 10%;
+    --destructive: 0 50% 42%;
+    --destructive-foreground: 45 12% 98%;
+    --border: 160 10% 20%;
+    --input: 160 10% 20%;
+    --ring: 152 40% 48%;
+    --album-field-from: 152 35% 24%;
+    --album-field-to: 158 32% 18%;
+    --album-slot-ink: 45 15% 96%;
+    --album-owned-glow: 152 50% 50%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    font-size: 15px;
+  }
+  @media (min-width: 640px) {
+    html {
+      font-size: 14px;
+    }
+  }
+  body {
+    @apply bg-background text-foreground antialiased text-[0.92rem] leading-snug;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
