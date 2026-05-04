@@ -43,18 +43,29 @@ export function buildCatalogForPrompt(rows: CatalogRow[]): string {
 
 export function buildScanUserPrompt(imageCount: number, catalogJson: string): string {
   return [
-    `Analise ${imageCount} foto(s) de páginas de um álbum de figurinhas da Copa (álbum oficial panini).`,
+    `Analise ${imageCount} foto(s) de páginas do álbum oficial Panini «Road to FIFA World Cup 2026» (ou similar).`,
     "",
-    "CATÁLOGO (n=número no álbum, c=código no verso se existir; lista compacta):",
+    "CATÁLOGO (n=número, c=código; só para cruzar o que realmente estiver COLADO):",
     catalogJson,
     "",
-    "Instruções:",
-    "- Identifique só figurinhas que estão CLARAMENTE COLADAS no álbum (encaixadas no suporte branco), não pacotes nem cromos soltos sobre a página.",
-    "- Cada slot preenchido no álbum corresponde a um item do catálogo: use o número visível na página ou o código/cróquio o mais fiel possível.",
-    "- Se não tiver certeza absoluta, NÃO inclua em coladas; use duvidas.",
-    "- Não invente números: album_number e album_code devem existir no catálogo acima quando possível.",
+    "=== REGRA CRÍTICA — O QUE É «TENHO / COLADO» ===",
+    "Só conta como COLADA uma figurinha quando vês a CROMO IMPRESSA FÍSICA colada ao álbum: em geral a FOTO DO ROSTO DO JOGADOR (ou imagem da lenda/brasão) em papel brilhante, preenchendo o retângulo do slot.",
     "",
-    "Responda em JSON com o formato exigido pelo schema (apenas JSON).",
+    "=== O QUE NUNCA É COLADO (trata como FALTA) ===",
+    "- Slot VAZIO no sentido Panini: ainda vês o desenho de fundo do álbum — muito comum um «26» ou arte grande no meio, código tipo «BRA 1», nome do jogador impresso no papel do álbum em baixo/canto. Isso é só o MOLDE do sítio onde se cola; NÃO é figurinha.",
+    "- Se só vês tipografia, cores de equipa, marca d'água ou ilustração genérica SEM a foto física da cromo por cima → NÃO está colada.",
+    "- Não confundas o nome do jogador impresso no papel do álbum com o nome na própria figurinha colada: se não há camada de cromo por cima do placeholder, é FALTA.",
+    "",
+    "=== FOTO DE PERTO OU MAU ÂNGULO ===",
+    "- Aplica as mesmas regras: vês placeholder/«26»/layout impresso sem rosto de cromo → não colada.",
+    "- Se não consegues ver claramente se há foto de rosto vs placeholder, não adivinhes: mete em «duvidas» com descrição, NÃO em «coladas».",
+    "",
+    "=== OUTROS ===",
+    "- Cromos soltas em cima da página, mãos, sombras: ignorar para «coladas».",
+    "- Na dúvida absoluta: NÃO incluir em coladas.",
+    "- album_number e album_code devem bater com o catálogo quando os listas.",
+    "",
+    "Responde só JSON válido no formato do schema.",
   ].join("\n");
 }
 

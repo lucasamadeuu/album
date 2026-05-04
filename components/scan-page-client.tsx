@@ -226,9 +226,10 @@ export function ScanPageClient() {
               Por foto (IA)
             </h1>
             <p className="text-[0.72rem] leading-relaxed text-muted-foreground">
-              Fotografa as páginas com boa luz. A IA só marca figurinhas que
-              parecem <strong className="font-medium text-foreground">coladas</strong>
-              ; o resto podes completar à mão. A chave Gemini fica no servidor.
+              Só contam figurinhas <strong className="font-medium text-foreground">coladas</strong>{" "}
+              com a foto da cromo (rosto jogador) no sítio. O molde do álbum com «26» ou só nome
+              impresso <strong className="font-medium text-foreground">não conta</strong> — a IA
+              foi instruída para isso; fotos pouco nítidas ou em mau ângulo ainda podem falhar.
             </p>
           </div>
         </div>

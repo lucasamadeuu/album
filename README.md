@@ -22,3 +22,5 @@ npm run dev
 4. Faça **Redeploy** após alterar variáveis de ambiente.
 
 Variáveis: ver `.env.example`.
+
+**Amigos / trocas:** rode `supabase/migration_006_profiles_amigos.sql` no SQL Editor (tabela `profiles`, partilha de coleção, política de leitura em `user_owned_stickers`).
