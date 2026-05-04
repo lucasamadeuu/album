@@ -15,7 +15,7 @@ npm run dev
 2. Em **Settings → Environment Variables**, adicione (production e, se quiser, preview):
    - `NEXT_PUBLIC_SUPABASE_URL`
    - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-   - Opcional: `SUPABASE_SERVICE_ROLE_KEY` (import CSV no app), `APISPORTS_KEY`, `APISPORTS_SEASON`
+   - Opcional: `SUPABASE_SERVICE_ROLE_KEY` (import CSV no app), `APISPORTS_KEY`, `APISPORTS_SEASON`, `GOOGLE_GENERATIVE_AI_API_KEY`, `GEMINI_MODEL` (padrão `gemini-2.5-flash`, como no cashflow)
 3. No **Supabase** → Authentication → **URL configuration**:
    - **Site URL**: `https://<seu-projeto>.vercel.app`
    - **Redirect URLs**: inclua `https://<seu-projeto>.vercel.app/auth/callback` (e URLs de preview, ex. `https://*-<team>.vercel.app/auth/callback`, conforme a documentação do Supabase).
