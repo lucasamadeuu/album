@@ -117,6 +117,36 @@ export function ScanPageClient() {
     }
   };
 
+  const removeMatchFromAnalysis = (stickerId: string) => {
+    setMatched((prev) => {
+      if (!prev) return null;
+      const next = prev.filter((m) => m.stickerId !== stickerId);
+      return next.length ? next : null;
+    });
+    setSelected((prev) => {
+      const n = new Set(prev);
+      n.delete(stickerId);
+      return n;
+    });
+  };
+
+  const discardAllAiSuggestions = () => {
+    setMatched(null);
+    setUnknownFromModel([]);
+    setSelected(new Set());
+    setModelLabel(null);
+    toast.message("Sugestões da IA descartadas.");
+  };
+
+  const selectAllRecognized = () => {
+    if (!matched?.length) return;
+    setSelected(new Set(matched.map((m) => m.stickerId)));
+  };
+
+  const deselectAllRecognized = () => {
+    setSelected(new Set());
+  };
+
   const toggleSel = (id: string) => {
     setSelected((prev) => {
       const n = new Set(prev);
@@ -149,12 +179,12 @@ export function ScanPageClient() {
         prev.some((x) => x.id === data.id)
           ? prev
           : [
-              ...prev,
-              {
-                id: data.id,
-                label: `#${data.album_number} · ${data.player_name}`,
-              },
-            ],
+            ...prev,
+            {
+              id: data.id,
+              label: `#${data.album_number} · ${data.player_name}`,
+            },
+          ],
       );
       toast.success(`${data.player_name} (${data.team_name}) adicionado.`);
       setManualNum("");
@@ -225,12 +255,6 @@ export function ScanPageClient() {
             <h1 className="text-[1.05rem] font-semibold tracking-tight">
               Por foto (IA)
             </h1>
-            <p className="text-[0.72rem] leading-relaxed text-muted-foreground">
-              Só contam figurinhas <strong className="font-medium text-foreground">coladas</strong>{" "}
-              com a foto da cromo (rosto jogador) no sítio. O molde do álbum com «26» ou só nome
-              impresso <strong className="font-medium text-foreground">não conta</strong> — a IA
-              foi instruída para isso; fotos pouco nítidas ou em mau ângulo ainda podem falhar.
-            </p>
           </div>
         </div>
       </header>
@@ -302,7 +326,7 @@ export function ScanPageClient() {
           )}
         </div>
 
-        {matched && (
+        {matched && matched.length > 0 && (
           <div className="space-y-2 rounded-lg border border-emerald-600/30 bg-emerald-500/[0.05] p-3">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <p className="text-[0.78rem] font-medium text-foreground">
@@ -315,22 +339,55 @@ export function ScanPageClient() {
               ) : null}
             </div>
             <p className="text-[0.68rem] text-muted-foreground">
-              Desmarca o que a IA errou. Isto só <strong className="font-medium text-foreground">adiciona</strong>{" "}
-              “tenho”; não remove figurinhas que já tinhas.
+              A IA erra às vezes. <strong className="font-medium text-foreground">Toca</strong>{" "}
+              para incluir/excluir do lote a gravar;{" "}
+              <strong className="font-medium text-foreground">«Tirar»</strong> remove a linha
+              desta análise. Só <strong className="font-medium text-foreground">adiciona</strong>{" "}
+              “tenho”.
             </p>
+            <div className="flex flex-wrap gap-1.5">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="h-8 text-[0.65rem]"
+                onClick={selectAllRecognized}
+              >
+                Marcar todas
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="h-8 text-[0.65rem]"
+                onClick={deselectAllRecognized}
+              >
+                Desmarcar todas
+              </Button>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                className="h-8 text-[0.65rem] text-destructive hover:text-destructive"
+                onClick={discardAllAiSuggestions}
+              >
+                Descartar análise da IA
+              </Button>
+            </div>
             <ul className="max-h-[min(50vh,22rem)] space-y-1 overflow-y-auto pr-0.5">
               {matched.map((m) => {
                 const on = selected.has(m.stickerId);
                 return (
-                  <li key={m.stickerId}>
+                  <li
+                    key={m.stickerId}
+                    className="flex items-stretch gap-1 overflow-hidden rounded-md border border-border/50 bg-card/60"
+                  >
                     <button
                       type="button"
                       onClick={() => toggleSel(m.stickerId)}
                       className={cn(
-                        "flex w-full items-start gap-2 rounded-md border px-2 py-2 text-left text-[0.78rem] transition-colors",
-                        on
-                          ? "border-emerald-500/50 bg-emerald-500/10"
-                          : "border-border/60 bg-card opacity-70",
+                        "min-w-0 flex flex-1 items-start gap-2 px-2 py-2 text-left text-[0.78rem] transition-colors",
+                        on ? "bg-emerald-500/10" : "opacity-80",
                       )}
                     >
                       <span
@@ -356,6 +413,15 @@ export function ScanPageClient() {
                           {m.playerName} · {m.teamName}
                         </span>
                       </span>
+                    </button>
+                    <button
+                      type="button"
+                      className="flex w-11 shrink-0 flex-col items-center justify-center border-l border-border/50 bg-muted/30 px-1 text-[0.58rem] font-medium leading-tight text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+                      aria-label="Tirar sugestão errada da lista"
+                      onClick={() => removeMatchFromAnalysis(m.stickerId)}
+                    >
+                      <X className="h-3.5 w-3.5" strokeWidth={2.5} />
+                      Tirar
                     </button>
                   </li>
                 );

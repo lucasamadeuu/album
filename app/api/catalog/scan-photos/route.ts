@@ -161,12 +161,11 @@ export async function POST(request: Request) {
   const model = genAI.getGenerativeModel({
     model: modelId,
     systemInstruction: [
-      "És um perito em álbuns Panini da Copa do Mundo.",
-      "COLADA = apenas quando existe cromo física colada com foto retrato do jogador (ou imagem oficial da lenda), cobrindo o slot.",
-      "NÃO É COLADA: slot que mostra o placeholder do álbum (ex.: número «26» grande, código BRA 1, nome impresso no papel) sem a camada de cromo por cima.",
-      "Nunca marques colada só porque lês o nome ou o código no papel do álbum.",
-      "Se não vês rosto/cromo claramente, usa array duvidas — não coladas.",
-      "Resposta: apenas JSON válido conforme o schema.",
+      "Perito em álbuns de cromos da Copa do Mundo FIFA.",
+      "COLADA só com retrato humano claro ou imagem oficial na cromo no slot, por cima do papel do álbum.",
+      "FALTA = molde impresso no livro (número grande no sítio, BRA 1, nome em tipografia) sem retrato colado.",
+      "NUNCA uses logotipos ou marcas fabricante como critério principal. Nunca inventes deteção de «logo» nas duvidas.",
+      "Dúvida só quando não consegues distinguir rosto colado vs placeholder. JSON apenas.",
     ].join(" "),
     generationConfig: {
       temperature: 0.05,

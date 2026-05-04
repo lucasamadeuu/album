@@ -11,6 +11,20 @@ export function spareTotalsBySticker(rows: OwnedQty[]): Map<string, number> {
   return m;
 }
 
+export function spareCollectionStats(rows: OwnedQty[]): {
+  extraCopies: number;
+  typesWithSpare: number;
+} {
+  let extraCopies = 0;
+  let typesWithSpare = 0;
+  for (const r of rows) {
+    const e = spareCount(r.quantity);
+    extraCopies += e;
+    if (e > 0) typesWithSpare += 1;
+  }
+  return { extraCopies, typesWithSpare };
+}
+
 /**
  * Trocas potenciais (presencial):
  * - iOffer: tenho repetidas e o amigo não tem no álbum.
