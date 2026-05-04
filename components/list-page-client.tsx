@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { CollectionToolbar } from "@/components/collection-toolbar";
 import { CollectionList } from "@/components/collection-list";
 import type { StickerRow } from "@/lib/types";
+import { teamProgressBySelection } from "@/lib/team-progress";
 import {
   type FilterTab,
   type OwnedRow,
@@ -36,6 +37,11 @@ export function ListPageClient({ stickers, ownedRows, userId }: Props) {
     (s) => s.album_number != null || (s.album_code?.trim() ?? "").length > 0,
   );
 
+  const teamProgress = useMemo(
+    () => teamProgressBySelection(stickers, owned),
+    [stickers, owned],
+  );
+
   return (
     <>
       <header className="flex flex-col gap-2.5 border-b border-border/60 px-4 pb-3 pt-3">
@@ -57,6 +63,7 @@ export function ListPageClient({ stickers, ownedRows, userId }: Props) {
           totalListed={filtered.length}
           totalOwned={owned.size}
           totalStickers={stickers.length}
+          teamProgress={teamProgress}
         />
       </header>
       <main className="px-4 pb-28 pt-1">

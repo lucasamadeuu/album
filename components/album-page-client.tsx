@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { AlbumBookSlider } from "@/components/album-book-slider";
 import { AlbumGrid } from "@/components/album-grid";
 import { CollectionToolbar } from "@/components/collection-toolbar";
 import { pagesForAlbumBook } from "@/lib/album-book-order";
 import type { StickerRow } from "@/lib/types";
+import { teamProgressBySelection } from "@/lib/team-progress";
 import {
   type FilterTab,
   type OwnedRow,
@@ -36,6 +37,11 @@ export function AlbumPageClient({ stickers, ownedRows, userId }: Props) {
 
   const bookPages = pagesForAlbumBook(filtered);
 
+  const teamProgress = useMemo(
+    () => teamProgressBySelection(stickers, owned),
+    [stickers, owned],
+  );
+
   return (
     <>
       <header className="border-b border-border/60 px-4 pb-3 pt-3">
@@ -61,6 +67,7 @@ export function AlbumPageClient({ stickers, ownedRows, userId }: Props) {
             totalListed={filtered.length}
             totalOwned={owned.size}
             totalStickers={stickers.length}
+            teamProgress={teamProgress}
           />
         </div>
       </header>

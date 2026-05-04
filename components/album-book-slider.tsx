@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AlbumGrid } from "@/components/album-grid";
 import { cn } from "@/lib/utils";
+import { stickersHaveCount } from "@/lib/team-progress";
 import type { StickerRow } from "@/lib/types";
 
 type BookPage = { team: string; stickers: StickerRow[] };
@@ -68,6 +69,8 @@ export function AlbumBookSlider({
   }
 
   const current = pages[pageIdx];
+  const pageHave = current ? stickersHaveCount(current.stickers, owned) : 0;
+  const pageTotal = current?.stickers.length ?? 0;
 
   return (
     <div className="flex flex-col gap-2">
@@ -75,6 +78,13 @@ export function AlbumBookSlider({
         <div className="flex items-center justify-between gap-2">
           <p className="min-w-0 truncate text-[0.78rem] font-semibold text-foreground">
             {current?.team ?? "—"}
+            {pageTotal > 0 ? (
+              <span className="ml-1.5 font-normal tabular-nums text-muted-foreground">
+                <span className="font-semibold text-foreground">{pageHave}</span>
+                <span className="text-muted-foreground/80"> de </span>
+                {pageTotal}
+              </span>
+            ) : null}
           </p>
           <p className="shrink-0 text-[0.65rem] tabular-nums text-muted-foreground">
             {pageIdx + 1} / {pages.length}
