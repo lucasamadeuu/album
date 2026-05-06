@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { ensureStickerOwnedRow } from "@/lib/ensure-owned-sticker";
 import type { StickerRow } from "@/lib/types";
 import { spareCount } from "@/lib/spares";
 import { stickerKindLabel } from "@/lib/sticker-kind";
@@ -37,13 +38,8 @@ export function CollectionList({
     const supabase = createClient();
     try {
       if (next) {
-        const { error } = await supabase.from("user_owned_stickers").insert({
-          user_id: userId,
-          sticker_id: row.id,
-          quantity: 1,
-        });
-        if (error) throw error;
-        onToggleLocal(row.id, true);
+        const qty = await ensureStickerOwnedRow(supabase, userId, row.id);
+        onQuantityLocal(row.id, qty);
       } else {
         const { error } = await supabase
           .from("user_owned_stickers")
